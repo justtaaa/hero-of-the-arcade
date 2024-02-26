@@ -1,0 +1,8 @@
+//
+// Created by Taisiia Nekrasova on 26/02/2024.
+//
+
+#ifndef HERO_OF_THE_ARCADE_FLAPPYBIRD_H
+#define HERO_OF_THE_ARCADE_FLAPPYBIRD_H
+
+#endif //HERO_OF_THE_ARCADE_FLAPPYBIRD_H
