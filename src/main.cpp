@@ -1,3 +1,11 @@
-//
-// Created by Taisiia Nekrasova on 26/02/2024.
-//
+#include <iostream>
+#include <SFML/Graphics.hpp>
+
+#include "FlappyBird.h"
+
+int main() {
+    FlappyBird game; // Create an instance of your FlappyBird game
+    game.run(); // Call the method that starts the game loop
+
+    return 0;
+}
