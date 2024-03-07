@@ -19,8 +19,18 @@ private:
 public:
     Pipe();
     void addPipe(float x, float y);
-    void update();
+    void update(float deltaTime);
     void draw(sf::RenderWindow& window) const;
+    std::vector<sf::FloatRect> getPipeBounds() const {
+        std::vector<sf::FloatRect> bounds;
+        for (const auto& pipe : pipesUp) {
+            bounds.push_back(pipe.getGlobalBounds());
+        }
+        for (const auto& pipe : pipesDown) {
+            bounds.push_back(pipe.getGlobalBounds());
+        }
+        return bounds;
+    }
 };
 
 

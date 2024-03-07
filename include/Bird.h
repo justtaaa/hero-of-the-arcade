@@ -15,10 +15,11 @@ private:
 
 public:
     Bird();
-    void update();
+    void update(float deltaTime);
     void flap();
     void draw(sf::RenderWindow& window) const;
     sf::FloatRect getBounds() const;
+
 };
 
 

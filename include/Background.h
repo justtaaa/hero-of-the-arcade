@@ -12,10 +12,12 @@ public:
     sf::Texture texture;
     sf::Sprite sprite;
     sf::RenderWindow window;
+    float scrollSpeed;
+    sf::Vector2f offset;
 
-    Background();
-    void draw(sf::RenderWindow& window) const;
-    void update();
+    Background(const sf::Vector2u& windowSize, float speed);
+    void draw(sf::RenderWindow& window);
+    void update(float deltaTime);
 };
 
 

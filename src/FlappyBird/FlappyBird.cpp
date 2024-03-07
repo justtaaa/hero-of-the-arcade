@@ -7,30 +7,32 @@
 
 FlappyBird::FlappyBird() {
     // Setup the game window
-    window.create(sf::VideoMode(800, 600), "Flappy Bird Clone", sf::Style::Close);
+    window.create(sf::VideoMode(800, 600), "Flappy Bird", sf::Style::Close);
     window.setFramerateLimit(60);
 
     // Initialize game state
     isGameOver = false;
 
 
-    background = std::make_unique<Background>();
+    sf::Vector2u windowSize = window.getSize();
+    background = std::make_unique<Background>(window.getSize(), -100.0f); // Negative speed for leftward scrolling
     bird = std::make_unique<Bird>();
     pipe = std::make_unique<Pipe>();
+
 }
 
 void FlappyBird::run() {
     sf::Clock clock;
     while (window.isOpen()) {
-        sf::Time deltaTime = clock.restart();
+        float deltaTime = clock.restart().asSeconds();
 
-        processEvents();
-        if (!isGameOver) {
-            update(deltaTime);
-        }
-        render();
+        processEvents(); // Handle user input and window events
+        update(deltaTime); // Update the game state
+        render(); // Draw the current state of the game to the window
     }
 }
+
+
 
 void FlappyBird::processEvents() {
     sf::Event event;
@@ -45,28 +47,53 @@ void FlappyBird::processEvents() {
     }
 }
 
-void FlappyBird::update(sf::Time deltaTime) {
-    bird->update();
-    pipe->update();
-
-    // Check for collisions
-    if (checkCollision()) {
-        isGameOver = true;
+void FlappyBird::update(float deltaTime) {
+    // First, check if the game is over
+    if (isGameOver) {
+        return;
     }
 
+    // Update the background with the scrolling effect
+    background->update(deltaTime);
+
+    // Update the bird's state with gravity and check for input to flap
+    bird->update(deltaTime);
+
+    // Update the pipes, moving them to the left
+    pipe->update(deltaTime);
+
+    // Check for collisions between the bird and the pipes
+    if (checkCollision()) {
+        isGameOver = true; // End the game if there's a collision
+    }
+
+    // Add new pipes at regular intervals
     static sf::Time timeSinceLastPipe = sf::Time::Zero;
-    timeSinceLastPipe += deltaTime;
-    if (timeSinceLastPipe > sf::seconds(2.0)) {
+    timeSinceLastPipe += sf::seconds(deltaTime);
+
+
+    if (timeSinceLastPipe > sf::seconds(1.5f)) {
         float pipeX = window.getSize().x;
-        float pipeY = rand() % (window.getSize().y - 200);
-        pipe->addPipe(pipeX, pipeY);
+        float lowerY = window.getSize().y - 300.0f;
+
+        pipe->addPipe(pipeX, lowerY);
         timeSinceLastPipe = sf::Time::Zero;
     }
 }
 
+
+
 bool FlappyBird::checkCollision() {
-    // collision detection between bird and pipes
-    return false;
+    sf::FloatRect birdBounds = bird->getBounds();
+    std::vector<sf::FloatRect> pipeBounds = pipe->getPipeBounds();
+
+    for (const auto& bound : pipeBounds) {
+        if (birdBounds.intersects(bound)) {
+            return true; // Collision detected
+        }
+    }
+
+    return false; // No collision detected
 }
 
 void FlappyBird::render() {

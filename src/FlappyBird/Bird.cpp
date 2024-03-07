@@ -1,3 +1,6 @@
+//
+// Created by Taisiia Nekrasova on 26/02/2024.
+//
 #include "Bird.h"
 #include <SFML/Graphics.hpp>
 
@@ -19,7 +22,7 @@ Bird::Bird() {
     jumpHeight = -5.0f; // Negative because the y-axis is inverted
 }
 
-void Bird::update() {
+void Bird::update(float deltaTime) {
     // Apply gravity to the movement speed
     movementSpeed += gravity;
     position.y += movementSpeed;

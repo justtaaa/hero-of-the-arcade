@@ -22,7 +22,7 @@ public:
     FlappyBird();
     void run();
     void processEvents();
-    void update(sf::Time deltaTime);
+    void update(float deltaTime);
     bool checkCollision();
     void render();
 };
